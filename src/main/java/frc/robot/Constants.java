@@ -15,6 +15,10 @@ package frc.robot;
  */
 public final class Constants
 {
+
+    public static final double driveDeadBand = 0.15;
+    public static final double turnDeadBand = 0.15;
+
     public static class OperatorConstants
     {
         public static final int DRIVER_CONTROLLER_PORT = 0;
