@@ -51,7 +51,10 @@ public class RobotContainer
         new Trigger(xbox::getAButtonPressed)
                 .onTrue(new InstantCommand(swerveSubsystem::zeroGyro));
 
-        new Trigger(xbox::getBButtonPressed).whileTrue(swerveSubsystem.buildPath(
+        new Trigger(xbox::getYButtonPressed).onTrue(
+                new InstantCommand((swerveSubsystem::zeroOdometry)));
+
+        new Trigger(xbox::getBButton).whileTrue(swerveSubsystem.buildPath(
                 new Pose2d(1, 0, new Rotation2d(0))));
 
         CommandScheduler.getInstance().setDefaultCommand(swerveSubsystem, teleopDriveCommand);

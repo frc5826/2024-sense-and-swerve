@@ -12,9 +12,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,6 +23,7 @@ import swervelib.parser.SwerveDriveConfiguration;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 
+import javax.swing.*;
 import java.io.File;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -38,9 +37,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public SwerveSubsystem(File directory) {
 
-        double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(12.8, 1);
+        double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(
+                12.8, 1);
 
-        double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(4), 6.75, 1);
+        double driveConversionFactor = SwerveMath.calculateMetersPerRotation(
+                Units.inchesToMeters(4), 8.14, 1);
 
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
 
@@ -67,13 +68,16 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     private void setupShuffleboard(Field2d field) {
-        ShuffleboardTab tab = Shuffleboard.getTab("drive");
+        ShuffleboardTab tab = Shuffleboard.getTab("position");
 
-        tab.add(field).withPosition(2,0).withSize(4,3);
+        tab.add(field)
+                .withPosition(2,0)
+                .withSize(5,3);
 
-        ShuffleboardLayout position = tab.getLayout("Robot position");
-        position.withPosition(0,0);
-        position.withSize(2,2);
+        ShuffleboardLayout position = tab.getLayout("Robot position", BuiltInLayouts.kList)
+                .withPosition(0,0)
+                .withSize(2,2);
+
 
         position.addDouble("Robot X", ()-> getPose().getX());
         position.addDouble("Robot Y", ()-> getPose().getY());
@@ -114,6 +118,10 @@ public class SwerveSubsystem extends SubsystemBase {
     public void resetOdometry(Pose2d initialHolonomicPose)
     {
         swerveDrive.resetOdometry(initialHolonomicPose);
+    }
+
+    public void zeroOdometry() {
+        swerveDrive.resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
     }
 
     public Pose2d getPose()
