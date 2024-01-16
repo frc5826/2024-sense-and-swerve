@@ -5,6 +5,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -46,51 +48,21 @@ public class RobotContainer
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer()
     {
-
         new Trigger(xbox::getAButtonPressed)
                 .onTrue(new InstantCommand(swerveSubsystem::zeroGyro));
 
-        // Configure the trigger bindings
-        configureBindings();
+        new Trigger(xbox::getBButtonPressed).whileTrue(swerveSubsystem.buildPath(
+                new Pose2d(1, 0, new Rotation2d(0))));
 
         CommandScheduler.getInstance().setDefaultCommand(swerveSubsystem, teleopDriveCommand);
     }
-    
-    
-    /**
-     * Use this method to define your trigger->command mappings. Triggers can be created via the
-     * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-     * predicate, or via the named factories in {@link
-     * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-     * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-     * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-     * joysticks}.
-     */
-    private void configureBindings()
-    {
-        // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-//        new Trigger(exampleSubsystem::exampleCondition)
-//                .onTrue(new ExampleCommand(exampleSubsystem));
-//
-//        // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-//        // cancelling on release.
-//        driverController.b().whileTrue(exampleSubsystem.exampleMethodCommand());
-    }
-    
-    
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-//    public Command getAutonomousCommand()
-//    {
-//        // An example command will be run in autonomous
-//        return Autos.exampleAuto(exampleSubsystem);
-//    }
-
 
     public VisionSubsystem getVisionSubsystem() {
         return visionSubsystem;
     }
+
+    public SwerveSubsystem getSwerveSubsystem() {
+        return swerveSubsystem;
+    }
+
 }
