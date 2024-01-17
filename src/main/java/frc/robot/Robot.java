@@ -94,7 +94,7 @@ public class Robot extends TimedRobot
             autonomousCommand.cancel();
         }
 
-        System.out.println(robotContainer.getVisionSubsystem().getAprilTagResults());
+        //System.out.println(robotContainer.getVisionSubsystem().getAprilTagResults());
 
     }
     

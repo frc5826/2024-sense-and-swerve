@@ -5,6 +5,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -30,7 +32,7 @@ import java.io.File;
 public class RobotContainer
 {
     // The robot's subsystems and commands are defined here...
-    private final VisionSubsystem visionSubsystem = new VisionSubsystem();
+    //private final VisionSubsystem visionSubsystem = new VisionSubsystem();
     
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController driverController =
@@ -57,12 +59,15 @@ public class RobotContainer
         new Trigger(xbox::getBButton).whileTrue(swerveSubsystem.buildPath(
                 new Pose2d(1, 0, new Rotation2d(0))));
 
+        new Trigger(xbox::getXButton).whileTrue(
+                AutoBuilder.followPath(PathPlannerPath.fromPathFile("Test path")));
+
         CommandScheduler.getInstance().setDefaultCommand(swerveSubsystem, teleopDriveCommand);
     }
 
-    public VisionSubsystem getVisionSubsystem() {
-        return visionSubsystem;
-    }
+//    public VisionSubsystem getVisionSubsystem() {
+//        return visionSubsystem;
+//    }
 
     public SwerveSubsystem getSwerveSubsystem() {
         return swerveSubsystem;
