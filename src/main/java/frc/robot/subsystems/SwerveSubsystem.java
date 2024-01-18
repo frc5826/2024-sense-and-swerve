@@ -10,6 +10,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -201,5 +203,15 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
 
+    public SwerveDriveKinematics getKinematics() {
+        return swerveDrive.kinematics;
+    }
 
+    public Rotation2d getGyroRotation() {
+        return getHeading();
+    }
+
+    public SwerveModulePosition[] getModulePositions() {
+        return swerveDrive.getModulePositions();
+    }
 }

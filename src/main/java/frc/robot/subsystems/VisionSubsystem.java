@@ -21,6 +21,9 @@ import java.util.List;
 public class VisionSubsystem extends SubsystemBase
 {
 
+    //PhotonLib provides us a "PoseAmbiguity". According to their docs "Numbers above 0.2 are likely to be ambiguous".
+    private static final double POSE_CUTOFF = 0.2;
+
     private final List<RobotCamera> cameras;
 
     /** Creates a new ExampleSubsystem. */
@@ -28,7 +31,7 @@ public class VisionSubsystem extends SubsystemBase
         cameras = List.of(
                 new RobotCamera(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0), "ms-lifecame-studio", true),
                 new RobotCamera(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0), "ms-lifecame-3000", false)
-                );
+        );
     }
 
 
@@ -41,8 +44,8 @@ public class VisionSubsystem extends SubsystemBase
                 if(result.hasTargets()){
                     List<PhotonTrackedTarget> targets = result.getTargets();
                     for(PhotonTrackedTarget target : targets) {
-                        if(target.getFiducialId() > -1) {
-                            output.add(new AprilTagResult(camera, target.getBestCameraToTarget(), target.getFiducialId(), target.getPoseAmbiguity()));
+                        if(target.getFiducialId() > -1 && target.getPoseAmbiguity() <= POSE_CUTOFF && target.getPoseAmbiguity() != -1) {
+                            output.add(new AprilTagResult(camera, target.getBestCameraToTarget(), target.getFiducialId(), target.getPoseAmbiguity(), result.getTimestampSeconds()));
                         }
                     }
                 }
