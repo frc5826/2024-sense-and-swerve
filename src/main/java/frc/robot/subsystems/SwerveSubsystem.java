@@ -36,8 +36,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public double maximumAngularVel = 3;
 
-    private Field2d field = new Field2d();
-
     public SwerveSubsystem(File directory) {
 
         double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(
@@ -55,37 +53,17 @@ public class SwerveSubsystem extends SubsystemBase {
         }
         swerveDrive.setHeadingCorrection(false);
 
-        setupShuffleboard(field);
-
         setupPathPlanner();
     }
 
     @Override
     public void periodic() {
-        field.setRobotPose(getPose());
+
     }
 
     public SwerveSubsystem(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg)
     {
         swerveDrive = new SwerveDrive(driveCfg, controllerCfg, maximumSpeed);
-    }
-
-    private void setupShuffleboard(Field2d field) {
-        ShuffleboardTab tab = Shuffleboard.getTab("position");
-
-        tab.add(field)
-                .withPosition(2,0)
-                .withSize(5,3);
-
-        ShuffleboardLayout position = tab.getLayout("Robot position", BuiltInLayouts.kList)
-                .withPosition(0,0)
-                .withSize(2,2);
-
-
-        position.addDouble("Robot X", ()-> getPose().getX());
-        position.addDouble("Robot Y", ()-> getPose().getY());
-        position.addDouble("Robot rotation", ()-> getHeading().getDegrees());
-
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative)

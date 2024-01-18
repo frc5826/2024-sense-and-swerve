@@ -6,6 +6,11 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.io.IOException;
@@ -18,6 +23,8 @@ public class LocalizationSubsystem extends SubsystemBase {
     private final VisionSubsystem visionSubsystem;
     private final SwerveSubsystem swerveSubsystem;
     private final SwerveDrivePoseEstimator poseEstimator;
+
+    private Field2d field = new Field2d();
 
     public LocalizationSubsystem(VisionSubsystem visionSubsystem, SwerveSubsystem swerveSubsystem) {
         try {
@@ -36,6 +43,8 @@ public class LocalizationSubsystem extends SubsystemBase {
         this.swerveSubsystem = swerveSubsystem;
         //TODO - Is there a better guess at initial pose?
         this.poseEstimator = new SwerveDrivePoseEstimator(swerveSubsystem.getKinematics(), swerveSubsystem.getGyroRotation(), swerveSubsystem.getModulePositions(), new Pose2d());
+
+        setupShuffleboard(field);
     }
 
     public void periodic() {
@@ -54,6 +63,26 @@ public class LocalizationSubsystem extends SubsystemBase {
         else {
             System.err.println("Unable to localize. Field Layout not loaded.");
         }
+
+        field.setRobotPose(getCurrentPose());
+    }
+
+    private void setupShuffleboard(Field2d field) {
+        ShuffleboardTab tab = Shuffleboard.getTab("position");
+
+        tab.add(field)
+                .withPosition(2,0)
+                .withSize(5,3);
+
+        ShuffleboardLayout position = tab.getLayout("Robot position", BuiltInLayouts.kList)
+                .withPosition(0,0)
+                .withSize(2,2);
+
+
+        position.addDouble("Robot X", ()-> getCurrentPose().getX());
+        position.addDouble("Robot Y", ()-> getCurrentPose().getY());
+        position.addDouble("Robot rotation", ()-> swerveSubsystem.getHeading().getDegrees());
+
     }
 
     public Pose2d getCurrentPose() {

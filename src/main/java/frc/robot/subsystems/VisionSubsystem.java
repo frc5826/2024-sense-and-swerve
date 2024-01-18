@@ -14,6 +14,7 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,8 +30,8 @@ public class VisionSubsystem extends SubsystemBase
     /** Creates a new ExampleSubsystem. */
     public VisionSubsystem() {
         cameras = List.of(
-                new RobotCamera(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0), "ms-lifecame-studio", true),
-                new RobotCamera(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0), "ms-lifecame-3000", false)
+                new RobotCamera(new Translation3d(-0.3, 0, 0), new Rotation3d(0, 0, Math.PI), "alpha-studio", true),
+                new RobotCamera(new Translation3d(0.3, 0, 0), new Rotation3d(0, 0, 0), "alpha-3000", true)
         );
     }
 

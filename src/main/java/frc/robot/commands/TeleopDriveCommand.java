@@ -33,10 +33,14 @@ public class TeleopDriveCommand extends Command {
     @Override
     public void execute() {
 
-        double bandedx = Math.abs(x.getAsDouble()) < driveDeadBand ? 0 : x.getAsDouble();
-        double bandedy = Math.abs(y.getAsDouble()) < driveDeadBand ? 0 : y.getAsDouble();
+        double x0 = x.getAsDouble();
+        double y0 = y.getAsDouble();
+        double angleV = angleVel.getAsDouble();
 
-        double bandedAngle = Math.abs(angleVel.getAsDouble()) < turnDeadBand ? 0 : angleVel.getAsDouble();
+        double bandedx = Math.abs(x0) < driveDeadBand ? 0 : x0;
+        double bandedy = Math.abs(y0) < driveDeadBand ? 0 : y0;
+
+        double bandedAngle = Math.abs(angleV) < turnDeadBand ? 0 : angleV;
 
         ChassisSpeeds speeds = new ChassisSpeeds(bandedx * swerveSubsystem.maximumSpeed,
                 bandedy * swerveSubsystem.maximumSpeed,

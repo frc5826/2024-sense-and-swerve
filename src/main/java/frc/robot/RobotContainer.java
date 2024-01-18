@@ -17,6 +17,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TeleopDriveCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.LocalizationSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
@@ -32,14 +33,14 @@ import java.io.File;
 public class RobotContainer
 {
     // The robot's subsystems and commands are defined here...
-    //private final VisionSubsystem visionSubsystem = new VisionSubsystem();
-    
-    // Replace with CommandPS4Controller or CommandJoystick if needed
-    private final CommandXboxController driverController =
-            new CommandXboxController(OperatorConstants.DRIVER_CONTROLLER_PORT);
+    private final VisionSubsystem visionSubsystem = new VisionSubsystem();
 
     private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(
             new File(Filesystem.getDeployDirectory() + "/swerve"));
+
+    private final LocalizationSubsystem localizationSubsystem = new LocalizationSubsystem(visionSubsystem, swerveSubsystem);
+    
+    // Replace with CommandPS4Controller or CommandJoystick if needed
 
     private final XboxController xbox = new XboxController(1);
 
@@ -65,9 +66,9 @@ public class RobotContainer
         CommandScheduler.getInstance().setDefaultCommand(swerveSubsystem, teleopDriveCommand);
     }
 
-//    public VisionSubsystem getVisionSubsystem() {
-//        return visionSubsystem;
-//    }
+    public VisionSubsystem getVisionSubsystem() {
+        return visionSubsystem;
+    }
 
     public SwerveSubsystem getSwerveSubsystem() {
         return swerveSubsystem;
