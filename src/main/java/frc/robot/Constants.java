@@ -5,6 +5,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+
+import java.io.IOException;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -19,8 +26,11 @@ public final class Constants
     public static final double driveDeadBand = 0.15;
     public static final double turnDeadBand = 0.15;
 
-    public static class OperatorConstants
-    {
-        public static final int DRIVER_CONTROLLER_PORT = 0;
-    }
+    public static final Pose2d speakerPark = new Pose2d(2, 5.54, Rotation2d.fromDegrees(180));
+    public static final Pose2d ampPark = new Pose2d(1.84, 7.5, Rotation2d.fromDegrees(90));
+
+    public static final Pose2d leftStagePark = new Pose2d(4.5, 5, Rotation2d.fromDegrees(300));
+    public static final Pose2d centerStagePark = new Pose2d(5.8, 4.5, Rotation2d.fromDegrees(180));
+    public static final Pose2d rightStagePark = new Pose2d(4.5, 3.5, Rotation2d.fromDegrees(60));
+
 }

@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.TeleopDriveCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -57,11 +56,23 @@ public class RobotContainer
         new Trigger(xbox::getYButtonPressed).onTrue(
                 new InstantCommand((swerveSubsystem::zeroOdometry)));
 
-        new Trigger(xbox::getBButton).whileTrue(swerveSubsystem.buildPath(
+        new Trigger(xbox::getBButton).whileTrue(localizationSubsystem.buildPath(
                 new Pose2d(1, 0, new Rotation2d(0))));
 
         new Trigger(xbox::getXButton).whileTrue(
                 AutoBuilder.followPath(PathPlannerPath.fromPathFile("Test path")));
+
+        new Trigger(()-> xbox.getPOV() == 0).whileTrue(
+                localizationSubsystem.buildPath(Constants.speakerPark));
+
+        new Trigger(()-> xbox.getPOV() == 90).whileTrue(
+                localizationSubsystem.buildPath(Constants.ampPark));
+
+        new Trigger(()-> xbox.getPOV() == 180).whileTrue(
+                localizationSubsystem.buildPath(Constants.leftStagePark));
+
+        new Trigger(()-> xbox.getPOV() == 270).whileTrue(
+                localizationSubsystem.buildPath(Constants.rightStagePark));
 
         CommandScheduler.getInstance().setDefaultCommand(swerveSubsystem, teleopDriveCommand);
     }
