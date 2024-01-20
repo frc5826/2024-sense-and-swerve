@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Transform3d;
 import frc.robot.Robot;
 
+import java.util.Objects;
+
 public class AprilTagResult {
 
     private final Transform3d aprilTagLocation;
@@ -47,5 +49,28 @@ public class AprilTagResult {
                 ", ambiguity=" + ambiguity +
                 ", camera=" + camera +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AprilTagResult that = (AprilTagResult) o;
+
+        if (id != that.id) return false;
+        if (Double.compare(timestamp, that.timestamp) != 0) return false;
+        return Objects.equals(camera, that.camera);
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = id;
+        result = 31 * result + (camera != null ? camera.hashCode() : 0);
+        temp = Double.doubleToLongBits(timestamp);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 }

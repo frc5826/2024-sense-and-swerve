@@ -37,4 +37,19 @@ public class RobotCamera {
                 ", aprilTag=" + aprilTag +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RobotCamera that = (RobotCamera) o;
+
+        return camera.getName().equals(that.camera.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return camera.getName().hashCode();
+    }
 }

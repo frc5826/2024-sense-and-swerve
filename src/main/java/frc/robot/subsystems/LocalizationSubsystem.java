@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Optional;
 
 //Code pulled from - https://github.com/STMARobotics/frc-7028-2023/blob/5916bb426b97f10e17d9dfd5ec6c3b6fda49a7ce/src/main/java/frc/robot/subsystems/PoseEstimatorSubsystem.java
@@ -29,6 +30,7 @@ public class LocalizationSubsystem extends SubsystemBase {
     private final VisionSubsystem visionSubsystem;
     private final SwerveSubsystem swerveSubsystem;
     private final SwerveDrivePoseEstimator poseEstimator;
+    private final HashSet<AprilTagResult> processed;
 
     private Pose3d robotPos = new Pose3d();
 
@@ -47,6 +49,7 @@ public class LocalizationSubsystem extends SubsystemBase {
             fieldLayout = null;
             e.printStackTrace();
         }
+        this.processed = new HashSet<>();
         this.visionSubsystem = visionSubsystem;
         this.swerveSubsystem = swerveSubsystem;
         //TODO - Is there a better guess at initial pose?
@@ -60,13 +63,16 @@ public class LocalizationSubsystem extends SubsystemBase {
     public void periodic() {
         if(fieldLayout != null){
             for(AprilTagResult result : visionSubsystem.getAprilTagResults()){
-                Optional<Pose3d> tagPose = fieldLayout.getTagPose(result.getId());
-                if(tagPose.isPresent()){
-                    Pose3d camPose = tagPose.get().transformBy(result.getAprilTagLocation().inverse());
-                    Pose3d robotPose = camPose.transformBy(result.getCamera().getRobotLocation());
-                    robotPos = robotPose;
+                if(!processed.contains(result)) {
+                    processed.add(result);
+                    Optional<Pose3d> tagPose = fieldLayout.getTagPose(result.getId());
+                    if (tagPose.isPresent()) {
+                        Pose3d camPose = tagPose.get().transformBy(result.getAprilTagLocation().inverse());
+                        Pose3d robotPose = camPose.transformBy(result.getCamera().getRobotLocation());
+                        robotPos = robotPose;
 
-                    poseEstimator.addVisionMeasurement(robotPose.toPose2d(), result.getTimestamp());
+                        poseEstimator.addVisionMeasurement(robotPose.toPose2d(), result.getTimestamp());
+                    }
                 }
             }
 
