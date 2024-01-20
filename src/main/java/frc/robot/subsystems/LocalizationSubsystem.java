@@ -102,7 +102,8 @@ public class LocalizationSubsystem extends SubsystemBase {
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                         new PIDConstants(5.0, 0.0, 0.0),
                         // Translation PID constants
-                        swerveSubsystem.getPID(),
+                        //swerveSubsystem.getPID(),
+                        new PIDConstants(5.0, 0, 0),
                         // Rotation PID constants
                         4.5,
                         // Max module speed, in m/s
@@ -124,8 +125,8 @@ public class LocalizationSubsystem extends SubsystemBase {
 
     public Command buildPath(Pose2d targetPose) {
         PathConstraints constraints = new PathConstraints(
-                1.0,
-                1.0,
+                2.0,
+                2.0,
                 3.14159,
                 3.14159);
 

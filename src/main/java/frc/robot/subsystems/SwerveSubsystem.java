@@ -78,6 +78,10 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public PIDConstants getPID() {
+        System.out.println(swerveDrive.swerveController.config.headingPIDF.p);
+        System.out.println(swerveDrive.swerveController.config.headingPIDF.i);
+        System.out.println(swerveDrive.swerveController.config.headingPIDF.d);
+
         return new PIDConstants(
                 swerveDrive.swerveController.config.headingPIDF.p,
                 swerveDrive.swerveController.config.headingPIDF.i,
