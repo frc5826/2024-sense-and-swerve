@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.TeleopDriveCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.TestPathCommand;
 import frc.robot.subsystems.LocalizationSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -61,8 +62,8 @@ public class RobotContainer
         new Trigger(xbox::getYButtonPressed).onTrue(
                 new InstantCommand((swerveSubsystem::zeroOdometry)));
 
-        new Trigger(xbox::getBButton).whileTrue(localizationSubsystem.buildPath(
-                new Pose2d(1, 0, new Rotation2d(0))));
+        new Trigger(xbox::getBButton).whileTrue(
+                new TestPathCommand(localizationSubsystem, swerveSubsystem));
 
         new Trigger(xbox::getXButton).whileTrue(
                 AutoBuilder.followPath(PathPlannerPath.fromPathFile("Test path")));
