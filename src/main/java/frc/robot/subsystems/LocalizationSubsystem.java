@@ -30,6 +30,8 @@ public class LocalizationSubsystem extends SubsystemBase {
     private final SwerveSubsystem swerveSubsystem;
     private final SwerveDrivePoseEstimator poseEstimator;
 
+    private Pose3d robotPos = new Pose3d();
+
     private Field2d field = new Field2d();
 
     public LocalizationSubsystem(VisionSubsystem visionSubsystem, SwerveSubsystem swerveSubsystem) {
@@ -61,7 +63,9 @@ public class LocalizationSubsystem extends SubsystemBase {
                 Optional<Pose3d> tagPose = fieldLayout.getTagPose(result.getId());
                 if(tagPose.isPresent()){
                     Pose3d camPose = tagPose.get().transformBy(result.getAprilTagLocation().inverse());
-                    Pose3d robotPose = camPose.transformBy(result.getCamera().getRobotLocation().inverse());
+                    Pose3d robotPose = camPose.transformBy(result.getCamera().getRobotLocation());
+                    robotPos = robotPose;
+
                     poseEstimator.addVisionMeasurement(robotPose.toPose2d(), result.getTimestamp());
                 }
             }
@@ -73,6 +77,13 @@ public class LocalizationSubsystem extends SubsystemBase {
         }
 
         field.setRobotPose(getCurrentPose());
+    }
+
+    public void reset() {
+        poseEstimator.resetPosition(
+                swerveSubsystem.getGyroRotation(),
+                swerveSubsystem.getModulePositions(),
+                getCurrentPose());
     }
 
     public void setupPathPlanner()
@@ -133,6 +144,18 @@ public class LocalizationSubsystem extends SubsystemBase {
         position.addDouble("Robot X", ()-> getCurrentPose().getX());
         position.addDouble("Robot Y", ()-> getCurrentPose().getY());
         position.addDouble("Robot rotation", ()-> swerveSubsystem.getHeading().getDegrees());
+
+
+        ShuffleboardLayout robot3DPose = tab.getLayout("robot 3d pose", BuiltInLayouts.kList)
+                .withPosition(7, 0)
+                .withSize(2, 4);
+
+        robot3DPose.addDouble("x", ()-> robotPos.getX());
+        robot3DPose.addDouble("y", ()-> robotPos.getY());
+        robot3DPose.addDouble("z", ()-> robotPos.getZ());
+        robot3DPose.addDouble("roll", ()-> Math.toDegrees(robotPos.getRotation().getX()));
+        robot3DPose.addDouble("pitch", ()-> Math.toDegrees(robotPos.getRotation().getY()));
+        robot3DPose.addDouble("yaw", ()-> Math.toDegrees(robotPos.getRotation().getZ()));
 
     }
 

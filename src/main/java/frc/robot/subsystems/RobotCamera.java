@@ -12,7 +12,7 @@ public class RobotCamera {
     private final boolean aprilTag;
 
     public RobotCamera(Translation3d cameraLocation, Rotation3d cameraDirection, String cameraName, boolean aprilTag) {
-        this.robotLocation = new Transform3d(cameraLocation, cameraDirection);
+        this.robotLocation = new Transform3d(cameraLocation, cameraDirection).inverse();
         this.camera = new PhotonCamera(cameraName);
         this.aprilTag = aprilTag;
     }

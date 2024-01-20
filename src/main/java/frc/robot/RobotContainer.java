@@ -51,7 +51,12 @@ public class RobotContainer
     public RobotContainer()
     {
         new Trigger(xbox::getAButtonPressed)
-                .onTrue(new InstantCommand(swerveSubsystem::zeroGyro));
+                .onTrue(new InstantCommand(() ->
+                {
+                    //Need to be run in this order
+                    swerveSubsystem.zeroGyro();
+                    localizationSubsystem.reset();
+                }));
 
         new Trigger(xbox::getYButtonPressed).onTrue(
                 new InstantCommand((swerveSubsystem::zeroOdometry)));

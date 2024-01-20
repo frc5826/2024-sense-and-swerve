@@ -26,7 +26,7 @@ public final class Constants
     public static final double driveDeadBand = 0.15;
     public static final double turnDeadBand = 0.15;
 
-    public static final Pose2d speakerPark = new Pose2d(2, 5.54, Rotation2d.fromDegrees(180));
+    public static final Pose2d speakerPark = new Pose2d(1.65, 5.54, Rotation2d.fromDegrees(180));
     public static final Pose2d ampPark = new Pose2d(1.84, 7.5, Rotation2d.fromDegrees(90));
 
     public static final Pose2d leftStagePark = new Pose2d(4.5, 5, Rotation2d.fromDegrees(300));
